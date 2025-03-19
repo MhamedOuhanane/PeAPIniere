@@ -13,7 +13,12 @@ return new class extends Migration
     {
         Schema::create('commandes', function (Blueprint $table) {
             $table->id();
+            $table->integer('quantity');
             $table->timestamps();
+
+            $table->foreignId('client_id')->constrained()->onDelete('cascade');
+            $table->foreignId('plante_id')->constrained()->onDelete('cascade');
+
         });
     }
 
