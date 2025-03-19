@@ -13,7 +13,12 @@ return new class extends Migration
     {
         Schema::create('plantes', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->text('description');
+            $table->decimal('peix', 6, 2);
             $table->timestamps();
+
+            $table->foreignId('categorie_id')->constrained()->onDelete('cascade');
         });
     }
 

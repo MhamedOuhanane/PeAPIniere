@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -11,10 +12,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('employes', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
-        });
+        // Schema::create('employes', function (Blueprint $table) {
+        //     $table->id();
+        //     $table->timestamps();
+        // });
+
+        DB::statement('CREATE TABLE employes()INHERITS(users)');
+        DB::statement('ALTER TABLE employes ADD CONSTRAINT employes_id_unique PRIMARY KEY (id)');
     }
 
     /**
