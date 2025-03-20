@@ -8,5 +8,5 @@ interface UserRepositoryInterface
     public function login($data);
     public function logout($user);
 
-    
+
 }

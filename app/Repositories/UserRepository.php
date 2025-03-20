@@ -8,7 +8,7 @@ class UserRepository implements UserRepositoryInterface
 {
     public function register($data, $user)
     {
-        return $user->create($data);
+        return $user::create($data);
     }
 
     public function login($data)
