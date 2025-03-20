@@ -3,47 +3,49 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Auth\AuthUserRequest;
+use App\RepositorieInterface\UserRepositoryInterface;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Monolog\Handler\ElasticaHandler;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthUserController extends Controller
 {
+    protected $userRepository;
+
+    public function __construct(UserRepositoryInterface $userRepository)
+    {
+        $this->userRepository = $userRepository;
+    }
+
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function login(AuthUserRequest $request)
     {
-        //
-    }
+        $data = $request->only('email', 'password');
+        if (Auth::attempt($data)) {
+            $user = Auth::user();
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+            try {
+                $token = JWTAuth::fromUser($user);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
+                return response()->json([
+                    'message' => 'Connexion réussie.',
+                    'token' => $token,
+                    'user' => $user
+                ], 200);
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+            } catch (\Throwable $th) {
+                return response()->json([
+                    'message' => 'Une erreur est survenue lors de la création du token.Erreur:'.$th->getMessage()
+                ], 500);
+            }   
+        } else {
+            return response()->json([
+                'message' => 'Email ou mot de passe est invalide.'
+            ], 404);
+        }
     }
 }
