@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->text('description');
-            $table->decimal('peix', 6, 2);
+            $table->decimal('prix', 6, 2);
             $table->timestamps();
 
             $table->foreignId('categorie_id')->constrained()->onDelete('cascade');

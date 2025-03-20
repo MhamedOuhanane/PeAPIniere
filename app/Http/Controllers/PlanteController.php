@@ -30,11 +30,11 @@ class PlanteController extends Controller
         }
 
         if (empty($result)) {
-            $message = 'Transactions trouvés avec succès.';
-            $status = 200;
-        } elseif ($result) {
             $message = "Il n'existe actuellement aucun plante associé à notre site.";
             $status = 404;
+        } elseif ($result) {
+            $message = 'Transactions trouvés avec succès.';
+            $status = 200;
         } else {
             $message = 'Certaines erreurs sont survenues lors du returne des transactions.';
             $status = 500;

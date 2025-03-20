@@ -9,4 +9,13 @@ class Photo extends Model
 {
     /** @use HasFactory<\Database\Factories\PhotoFactory> */
     use HasFactory;
+
+    protected $fillable = [
+        'image',
+    ];
+
+    public function plante()
+    {
+        return $this->belongsTo(Plante::class);
+    }
 }
