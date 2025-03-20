@@ -6,6 +6,7 @@ use App\Models\Plante;
 use App\Http\Requests\StorePlanteRequest;
 use App\Http\Requests\UpdatePlanteRequest;
 use App\RepositorieInterface\planteRepositoryInterface;
+use Illuminate\Http\Request;
 
 class PlanteController extends Controller
 {
@@ -18,9 +19,15 @@ class PlanteController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $result = $this->planteRepository->getAllPlantes();
+        $search = $request->only('search') ?? null;
+
+        if (!$search) {
+            $result = $this->planteRepository->getAllPlantes();
+        } else {
+            $result = $this->planteRepository->searchPlantes($search);
+        }
 
         if (empty($result)) {
             $message = 'Transactions trouvés avec succès.';

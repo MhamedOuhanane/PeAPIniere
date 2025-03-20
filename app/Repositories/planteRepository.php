@@ -11,4 +11,10 @@ class planteRepository implements planteRepositoryInterface
     {
         return Plante::all();
     }
+
+    public function searchPlantes($search)
+    {
+        return Plante::where($search)->get();
+    }
+
 }
