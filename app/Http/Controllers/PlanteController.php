@@ -22,9 +22,12 @@ class PlanteController extends Controller
     {
         $result = $this->planteRepository->getAllPlantes();
 
-        if ($result) {
+        if (empty($result)) {
             $message = 'Transactions trouvés avec succès.';
             $status = 200;
+        } elseif ($result) {
+            $message = "Il n'existe actuellement aucun plante associé à notre site.";
+            $status = 404;
         } else {
             $message = 'Certaines erreurs sont survenues lors du returne des transactions.';
             $status = 500;

@@ -6,3 +6,6 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->group(function(){
     Route::apiResource('plante', PlanteController::class);
 });
+
+
+require __DIR__.'/auth.php';
