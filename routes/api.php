@@ -1,7 +1,11 @@
 <?php
 
-use App\Http\Controllers\Auth\RegisterController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\PlanteController;
 use Illuminate\Support\Facades\Route;
 
-Route::post('register', [RegisterController::class, 'register']);
+Route::middleware('auth:api')->group(function(){
+    Route::apiResource('plante', PlanteController::class);
+});
+
+
+require __DIR__.'/auth.php';
