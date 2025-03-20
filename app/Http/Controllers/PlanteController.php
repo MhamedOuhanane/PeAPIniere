@@ -5,15 +5,35 @@ namespace App\Http\Controllers;
 use App\Models\Plante;
 use App\Http\Requests\StorePlanteRequest;
 use App\Http\Requests\UpdatePlanteRequest;
+use App\RepositorieInterface\planteRepositoryInterface;
 
 class PlanteController extends Controller
 {
+    protected $planteRepository;
+
+    public function __construct(planteRepositoryInterface $planteRepository)
+    {
+        $this->planteRepository = $planteRepository;
+    }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        $result = $this->planteRepository->getAllPlantes();
+
+        if ($result) {
+            $message = 'Transactions trouvés avec succès.';
+            $status = 200;
+        } else {
+            $message = 'Certaines erreurs sont survenues lors du returne des transactions.';
+            $status = 500;
+        }
+        
+        return response()->json([
+            'message' => $message,
+            'plantes' => $result,
+        ], $status);
     }
 
     /**
