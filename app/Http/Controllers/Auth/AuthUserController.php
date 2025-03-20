@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\AuthUserRequest;
+use App\Models\User;
 use App\RepositorieInterface\UserRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -34,7 +35,7 @@ class AuthUserController extends Controller
                 return response()->json([
                     'message' => 'Connexion réussie.',
                     'token' => $token,
-                    'user' => $user
+                    'user' => $user,
                 ], 200);
 
             } catch (\Throwable $th) {
