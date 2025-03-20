@@ -6,20 +6,15 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\AuthUserRequest;
 use App\Models\User;
 use App\RepositorieInterface\UserRepositoryInterface;
+use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Monolog\Handler\ElasticaHandler;
+use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthUserController extends Controller
 {
-    protected $userRepository;
-
-    public function __construct(UserRepositoryInterface $userRepository)
-    {
-        $this->userRepository = $userRepository;
-    }
-
     /**
      * Display a listing of the resource.
      */
@@ -38,15 +33,29 @@ class AuthUserController extends Controller
                     'user' => $user,
                 ], 200);
 
-            } catch (\Throwable $th) {
+            } catch (JWTException $jwte) {
                 return response()->json([
-                    'message' => 'Une erreur est survenue lors de la création du token.Erreur:'.$th->getMessage()
+                    'message' => 'Une erreur est survenue lors de la création du token.Erreur:'.$jwte->getMessage()
                 ], 500);
             }   
         } else {
             return response()->json([
                 'message' => 'Email ou mot de passe est invalide.'
             ], 404);
+        }
+    }
+
+    public function logout(User $user)
+    {
+        try {
+
+            JWTAuth::invalidate(JWTAuth::getToken());
+
+            return response()->json(['message' => 'Déconnexion réussie.']);
+        } catch (JWTException $jwte) {
+            return response()->json([
+                'message' => "Une erreur est survenue lors de la déconnexion.Erreur: " . $jwte->getMessage() . " Veuillez réessayer plus tard."
+            ], 500);
         }
     }
 }
