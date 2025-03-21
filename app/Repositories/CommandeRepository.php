@@ -44,7 +44,7 @@ class CommandeRepository implements CommandeRepositoryInterface
 
     public function deleteCommande($commande)
     {
-        
+        return $commande->delete();
     }
 
 }

@@ -108,6 +108,18 @@ class CommandeController extends Controller
      */
     public function destroy(Commande $commande)
     {
-        //
+        $result = $this->commandeRepository->deleteCommande($commande);
+        if ($result) {
+            $massage = 'Le commande de #id='. $commande->id .'a étè supprimer avec succès';
+            $status = 200; 
+        } else {
+            $message = 'Échec de la suppression de la commande #id='.$commande->id;
+            $status = 500;
+        }
+
+        return response()->json([
+            'message' => $message,
+            'commande' => $commande,
+        ], $status);
     }
 }
