@@ -3,9 +3,9 @@
 namespace App\Repositories;
 
 use App\Models\Plante;
-use App\RepositorieInterface\planteRepositoryInterface;
+use App\RepositorieInterface\PlanteRepositoryInterface;
 
-class planteRepository implements planteRepositoryInterface
+class PlanteRepository implements PlanteRepositoryInterface
 {
     public function getAllPlantes()
     {
