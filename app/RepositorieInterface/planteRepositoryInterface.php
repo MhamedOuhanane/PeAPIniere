@@ -2,7 +2,7 @@
 
 namespace App\RepositorieInterface;
 
-interface planteRepositoryInterface
+interface PlanteRepositoryInterface
 {
     public function getAllPlantes();
     public function searchPlantes($search);
