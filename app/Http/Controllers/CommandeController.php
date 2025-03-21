@@ -9,6 +9,7 @@ use App\Models\Client;
 use App\Models\Plante;
 use App\RepositorieInterface\CommandeRepositoryInterface;
 use App\RepositorieInterface\PlanteRepositoryInterface;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class CommandeController extends Controller
@@ -27,9 +28,34 @@ class CommandeController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $status = $request->only('status');
+        $client = Client::find(Auth::id());
+        $commandes = [];
+
+        if (!$status) {
+            $message = 'Mes commandes: ';
+            $commandes = $client->commandes;
+            $statusMessage = 200;
+        } else {
+            $result = $this->commandeRepository->getClientCommandes($client, $status);
+            if ($result) {
+                $message = 'Les commandes qui '. $status['status'] . 'sont: ';
+                $commandes = $result;
+                $statusMessage = 200;
+            } else {
+                $message = 'Aucun tag trouvé avec le nom ' . $status['status'] . '.';
+                $statusMessage = 404;
+            }
+            
+        }
+
+        return response()->json([
+            'message' => $message,
+            'commandes' => $commandes,
+        ], $statusMessage);
+        
     }
 
     /**
@@ -82,6 +108,18 @@ class CommandeController extends Controller
      */
     public function destroy(Commande $commande)
     {
-        //
+        $result = $this->commandeRepository->deleteCommande($commande);
+        if ($result) {
+            $message = 'Le commande de #id='. $commande->id .'a étè supprimer avec succès';
+            $status = 200; 
+        } else {
+            $message = 'Échec de la suppression de la commande #id='.$commande->id;
+            $status = 500;
+        }
+
+        return response()->json([
+            'message' => $message,
+            'commande' => $commande,
+        ], $status);
     }
 }
