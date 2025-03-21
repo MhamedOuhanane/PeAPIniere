@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StorePhotoRequest;
 use App\Models\Plante;
 use App\Http\Requests\StorePlanteRequest;
 use App\Http\Requests\UpdatePlanteRequest;
@@ -51,7 +52,15 @@ class PlanteController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store($slug)
+    public function store(StorePlanteRequest $request)
+    {
+        
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show($slug)
     {
         $result = [];
         if (!$slug) {
@@ -67,19 +76,11 @@ class PlanteController extends Controller
                 $status = 404;
             }
 
-            return response()->json([
-                'message' => $message,
-                'plante' => $result,
-            ], $status);
         }
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Plante $plante)
-    {
-        //
+        return response()->json([
+            'message' => $message,
+            'plante' => $result,
+        ], $status);
     }
 
     /**
