@@ -17,4 +17,9 @@ class planteRepository implements planteRepositoryInterface
         return Plante::where('name', 'ILIKE', '%' . $search['search'] . '%')->get();
     }
 
+    public function findPlante($slug)
+    {
+        return Plante::where('slug', $slug)->first();
+    }
+
 }

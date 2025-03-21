@@ -8,6 +8,8 @@ use App\Http\Requests\UpdatePlanteRequest;
 use App\RepositorieInterface\planteRepositoryInterface;
 use Illuminate\Http\Request;
 
+use function Laravel\Prompts\error;
+
 class PlanteController extends Controller
 {
     protected $planteRepository;
@@ -22,7 +24,7 @@ class PlanteController extends Controller
     public function index(Request $request)
     {
         $search = $request->only('search') ?? null;
-
+        $result = [];
         if (!$search) {
             $result = $this->planteRepository->getAllPlantes();
         } else {
@@ -49,9 +51,27 @@ class PlanteController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StorePlanteRequest $request)
+    public function store($slug)
     {
-        //
+        $result = [];
+        if (!$slug) {
+            $message = 'Slug manquant.';
+            $status = 404;
+        } else {
+            $result = $this->planteRepository->findPlante($slug);
+            if ($result) {
+                $message = 'Plante trouvée avec succès !';
+                $status = 200;
+            }else {
+                $message = 'Plante non trouvée.';
+                $status = 404;
+            }
+
+            return response()->json([
+                'message' => $message,
+                'plante' => $result,
+            ], $status);
+        }
     }
 
     /**
