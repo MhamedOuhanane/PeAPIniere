@@ -110,7 +110,7 @@ class CommandeController extends Controller
     {
         $result = $this->commandeRepository->deleteCommande($commande);
         if ($result) {
-            $massage = 'Le commande de #id='. $commande->id .'a étè supprimer avec succès';
+            $message = 'Le commande de #id='. $commande->id .'a étè supprimer avec succès';
             $status = 200; 
         } else {
             $message = 'Échec de la suppression de la commande #id='.$commande->id;
