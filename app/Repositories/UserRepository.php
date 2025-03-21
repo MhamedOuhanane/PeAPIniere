@@ -10,15 +10,5 @@ class UserRepository implements UserRepositoryInterface
     {
         return $user::create($data);
     }
-
-    public function login($data)
-    {
-
-    }
-
-    public function logout($user)
-    {
-
-    }
-
+    
 }

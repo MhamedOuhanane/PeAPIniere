@@ -6,6 +6,9 @@ use App\Models\Plante;
 use App\Http\Requests\StorePlanteRequest;
 use App\Http\Requests\UpdatePlanteRequest;
 use App\RepositorieInterface\planteRepositoryInterface;
+use Illuminate\Http\Request;
+
+use function Laravel\Prompts\error;
 
 class PlanteController extends Controller
 {
@@ -18,16 +21,22 @@ class PlanteController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $result = $this->planteRepository->getAllPlantes();
+        $search = $request->only('search') ?? null;
+        $result = [];
+        if (!$search) {
+            $result = $this->planteRepository->getAllPlantes();
+        } else {
+            $result = $this->planteRepository->searchPlantes($search);
+        }
 
         if (empty($result)) {
-            $message = 'Transactions trouvés avec succès.';
-            $status = 200;
-        } elseif ($result) {
             $message = "Il n'existe actuellement aucun plante associé à notre site.";
             $status = 404;
+        } elseif ($result) {
+            $message = 'Transactions trouvés avec succès.';
+            $status = 200;
         } else {
             $message = 'Certaines erreurs sont survenues lors du returne des transactions.';
             $status = 500;
@@ -42,9 +51,27 @@ class PlanteController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StorePlanteRequest $request)
+    public function store($slug)
     {
-        //
+        $result = [];
+        if (!$slug) {
+            $message = 'Slug manquant.';
+            $status = 404;
+        } else {
+            $result = $this->planteRepository->findPlante($slug);
+            if ($result) {
+                $message = 'Plante trouvée avec succès !';
+                $status = 200;
+            }else {
+                $message = 'Plante non trouvée.';
+                $status = 404;
+            }
+
+            return response()->json([
+                'message' => $message,
+                'plante' => $result,
+            ], $status);
+        }
     }
 
     /**
