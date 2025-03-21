@@ -12,9 +12,9 @@ class CommandeRepository implements CommandeRepositoryInterface
         return Commande::all();
     }
 
-    public function getClientCommandes($client)
+    public function getClientCommandes($client, $status)
     {
-        
+        return Commande::where($status)->where('client_id', $client->id);
     }
 
     public function findCommande($commande)
