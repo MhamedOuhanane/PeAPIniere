@@ -32,6 +32,11 @@ class User extends Authenticatable implements JWTSubject
         $this->belongsTo(Role::class);
     }
 
+    public function getFullName()
+    {
+        return $this->first_name . " " . $this->last_name;
+    }
+
     /**
      * The attributes that should be hidden for serialization.
      *

@@ -17,8 +17,13 @@ return new class extends Migration
         //     $table->timestamps();
         // });
 
-        DB::statement('CREATE TABLE employes()INHERITS(users)');
-        DB::statement('ALTER TABLE employes ADD CONSTRAINT employes_id_unique PRIMARY KEY (id)');
+        DB::statement(
+            'CREATE TABLE employes(
+                id BIGSERIAL PRIMARY KEY,
+                CONSTRAINT employes_id_unique UNIQUE (id)
+            )INHERITS(users)'
+        );
+
     }
 
     /**
