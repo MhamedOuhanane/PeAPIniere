@@ -52,22 +52,18 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
         $status = $request->only('status');
-        $role = $this->roleRepository->FindRoleByName('employe'); 
+        $data = [
+            'id' => 3,
+            'first_name' => $user->first_name,
+            'last_name' => $user->last_name,
+            'email' => $user->email,
+            'password' => $user->password,
+        ];
         
-        if (!$role) {
-            $message = "Le rôle employé n'a pas été trouvé";
-            $statusCode = 404; 
-
-        } elseif ($status['status'] == 'Promotion' && $role) {
-            $data = [
-                'id' => 3,
-                'first_name' => $user->first_name,
-                'last_name' => $user->last_name,
-                'email' => $user->email,
-                'password' => $user->password,
-                'role_id' => $role->id,
-            ];
-            dd($data);
+        if ($status['status'] == 'Promotion') {
+            $role = $this->roleRepository->FindRoleByName('employe'); 
+            $data['role_id'] = $role->id;
+            
             $delete = $this->userRepository->deleteUser($user);
             
             if ($delete) {
@@ -85,7 +81,29 @@ class UserController extends Controller
                 $message = "L'utilisateur n'a pas pu être supprimé";
                 $statusCode = 500; 
             }
-        } 
+        } elseif ($status['status'] == 'Démotion') {
+            $role = $this->roleRepository->FindRoleByName('client'); 
+            $data['role_id'] = $role->id;
+
+            
+            $delete = $this->userRepository->deleteUser($user);
+
+            if ($delete) {
+                $client = new Client();
+
+                $result = $this->userRepository->register($data, $client);
+                if ($result) {
+                    $message = "L'utilisateur " . $client->getFullName() . " a été démotionné";
+                    $statusCode = 200; 
+                } else {
+                    $message = "La mise à jour du rôle a échoué";
+                    $statusCode = 500; 
+                }
+            } else {
+                $message = "L'utilisateur n'a pas pu être supprimé";
+                $statusCode = 500; 
+            }
+        }
 
         return response()->json([
             'message' => $message,
