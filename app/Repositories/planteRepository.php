@@ -5,12 +5,18 @@ namespace App\Repositories;
 use App\Models\Categorie;
 use App\Models\Plante;
 use App\RepositorieInterface\PlanteRepositoryInterface;
+use Illuminate\Support\Facades\DB;
 
 class PlanteRepository implements PlanteRepositoryInterface
 {
     public function getAllPlantes()
     {
-        return Plante::with('images')->get();
+        return DB::table('plantes as pl')
+                    ->leftJoin('photos as ph', 'pl.id', '=', 'ph.plante_id')
+                    ->leftJoin('commandes as cd', 'pl.id', '=', 'cd.plante_id')
+                    ->select('pl.*', 'ph.*', DB::raw('COUNT(cd.*) AS commandeCount'))
+                    ->groupBy('pl.id', 'ph.id')
+                    ->get();
     }
 
     public function searchPlantes($search)

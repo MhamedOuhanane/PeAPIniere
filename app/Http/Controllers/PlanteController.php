@@ -121,12 +121,12 @@ class PlanteController extends Controller
     {
         $data = $request->only('name', 'description', 'prix', 'categorie_id');
         $result = $this->planteRepository->updatePlante($data, $plante);
-
+        
         if ($result) {
-            $message = 'Le categorie a été modifiée avec succès.';
+            $message = 'La plante a été modifiée avec succès.';
             $statusCode = 200;
         } else {
-            $message = 'Erreur lors de la modification du categorie.';
+            $message = 'Erreur lors de la modification du plante.';
             $statusCode = 500;
         }
         

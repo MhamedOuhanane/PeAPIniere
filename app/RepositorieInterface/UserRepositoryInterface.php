@@ -6,6 +6,7 @@ interface UserRepositoryInterface
 {
     public function register($data, $user);
 
+    public function getAllUser();
     public function UpdateUser($user);
     public function deleteUser($user);
     public function findUserById($user, $id);
