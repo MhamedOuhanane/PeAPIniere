@@ -22,7 +22,8 @@ class UpdateCommandeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'status' => ['required', 'string'],
+            'status' => ['string'],
+            'quantity' => ['integer', 'min:1', 'max:20']
         ];
     }
 }

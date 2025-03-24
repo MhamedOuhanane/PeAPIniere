@@ -24,7 +24,7 @@ class AuthUserController extends Controller
         if (Auth::attempt($data)) {
             $user = Auth::user();
 
-            try {
+            try {  
                 $token = JWTAuth::fromUser($user);
 
                 return response()->json([

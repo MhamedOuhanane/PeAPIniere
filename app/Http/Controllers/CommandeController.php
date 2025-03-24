@@ -13,6 +13,7 @@ use App\RepositorieInterface\PlanteRepositoryInterface;
 use App\RepositorieInterface\UserRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class CommandeController extends Controller
 {
@@ -36,6 +37,8 @@ class CommandeController extends Controller
     public function index(Request $request)
     {
         $user = Auth::user();
+        
+        Gate::authorize('viewAny');
         
         if ($user->role == 'client') {
             $status = $request->only('status');
@@ -83,6 +86,8 @@ class CommandeController extends Controller
      */
     public function store(StoreCommandeRequest $request)
     {
+        Gate::authorize('create');
+
         $client = Client::find(Auth::id());
         $data = $request->only('quantity', 'slug');
         $plante = $this->planteRepository->findPlanteBySlug($data['slug']);
@@ -112,7 +117,13 @@ class CommandeController extends Controller
      */
     public function show(Commande $commande)
     {
-        //
+        Gate::authorize('view');
+
+        return response()->json([
+            'message' => 'Le commande : ',
+            'commande' => $commande,
+        ], 200);
+
     }
 
     /**
@@ -120,20 +131,26 @@ class CommandeController extends Controller
      */
     public function update(UpdateCommandeRequest $request, Commande $commande)
     {
+        $data = $request->only('status', 'quantity');
         $status = $request->only('status');
-        if ($commande->status == $status['status']) {
-            $message = 'La commande a déjà ce statut.';
-            $statusCode = 400;
-        } else {
-            $result = $this->commandeRepository->updateCommande($status, $commande);
 
-            if ($result) {
-                $message = 'La commande a été modifiée avec succès. Nouveau statut : ' . $status['status'];
-                $statusCode = 200;
-            } else {
-                $message = 'Erreur lors de la modification de la commande.';
-                $statusCode = 500;
-            }
+        Gate::authorize('update', [Auth::user(), $commande, $status]);
+
+        if ($commande->status == $status) {
+            return response()->json([
+                'message' => 'La commande a déjà ce statut.',
+                'commande' => $commande,
+            ], 400);
+        }
+
+        $result = $this->commandeRepository->updateCommande($data, $commande);
+
+        if ($result) {
+            $message = 'La commande a été modifiée avec succès. Nouveau statut : ' . $status;
+            $statusCode = 200;
+        } else {
+            $message = 'Erreur lors de la modification de la commande.';
+            $statusCode = 500;
         }
         
         return response()->json([
@@ -147,6 +164,8 @@ class CommandeController extends Controller
      */
     public function destroy(Commande $commande)
     {
+        Gate::authorize('delete');
+
         $result = $this->commandeRepository->deleteCommande($commande);
         if ($result) {
             $message = 'Le commande de #id='. $commande->id .'a étè supprimer avec succès';
