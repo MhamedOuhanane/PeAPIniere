@@ -65,7 +65,7 @@ class PlanteController extends Controller
     public function store(StorePlanteRequest $request)
     {
         $data = $request->only('name', 'description', 'prix', 'categorie_id');
-        $photo = $request->only('image');
+        $photo['image'] = $request->file('image')->store('photos', 'public');
 
         $result = $this->planteRepository->createPlante($data);
         
@@ -90,6 +90,7 @@ class PlanteController extends Controller
         return response()->json([
             'message' => $message,
             'plante' => $result,
+            'planteImages' => $result->images,
         ], $statusCode);
         
     }
