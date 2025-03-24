@@ -25,7 +25,7 @@ class UpdatePlanteRequest extends FormRequest
         return [
             'name'=> ['required', 'string', 'unique:plantes,name,' . $plante->id], 
             'description'=> ['required', 'string', 'min:20'], 
-            'prix'=> ['required', 'decimal:9.99,299.99'], 
+            'prix'=> ['required', 'numeric', 'between:9.99,299.99'], 
             'categorie_id'=> ['required', 'integer', 'exists:categories,id'],
         ];
     }
