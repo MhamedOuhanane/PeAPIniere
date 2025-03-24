@@ -11,7 +11,7 @@ class CommandeRepository implements CommandeRepositoryInterface
     public function getAllCommndes()
     {
         return DB::table('commandes as cd')
-                    ->leftJoin('clients as cl', 'cd.id', '=', 'cl.client_id')
+                    ->leftJoin('clients as cl', 'cd.id', '=', 'cd.client_id')
                     ->select('cl.first_name', 'cl.last_name', 'cl.email', 'cd.*')
                     ->get();
     }

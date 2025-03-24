@@ -25,7 +25,6 @@ class DashboardAdminController extends Controller
         $this->categorieRepository = $categorieRepository;
         $this->planteRepository = $planteRepository;
         $this->commandeRepository = $commandeRepository;
-    
     }
     /**
      * Display a listing of the resource.
@@ -36,7 +35,7 @@ class DashboardAdminController extends Controller
         $categories = $this->categorieRepository->getAllCategories();
         $plantes = $this->planteRepository->getAllPlantes();
         $commandes = $this->commandeRepository->getAllCommndes();
-
+        
         if (!$users) {
             return response()->json([
                 'message' => 'Erreur lors de la récupération des users.',
