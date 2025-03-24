@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Models\Categorie;
 use App\Models\Plante;
 use App\RepositorieInterface\PlanteRepositoryInterface;
 
@@ -21,5 +22,10 @@ class PlanteRepository implements PlanteRepositoryInterface
     {
         return Plante::where('slug', $slug)->first();
     }
+
+    public function createPlante($data)
+    {
+        return Plante::create($data);
+    } 
 
 }

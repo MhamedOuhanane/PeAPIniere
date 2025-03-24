@@ -6,6 +6,7 @@ use App\Http\Requests\StorePhotoRequest;
 use App\Models\Plante;
 use App\Http\Requests\StorePlanteRequest;
 use App\Http\Requests\UpdatePlanteRequest;
+use App\RepositorieInterface\PhotoRepositoryInterface;
 use App\RepositorieInterface\PlanteRepositoryInterface;
 use Illuminate\Http\Request;
 
@@ -14,11 +15,16 @@ use function Laravel\Prompts\error;
 class PlanteController extends Controller
 {
     protected $planteRepository;
+    protected $photoRepository;
 
-    public function __construct(PlanteRepositoryInterface $planteRepository)
+    public function __construct(PlanteRepositoryInterface $planteRepository,
+                                PhotoRepositoryInterface $photoRepository,
+                                )
     {
         $this->planteRepository = $planteRepository;
+        $this->photoRepository = $photoRepository;
     }
+
     /**
      * Display a listing of the resource.
      */
@@ -58,6 +64,32 @@ class PlanteController extends Controller
      */
     public function store(StorePlanteRequest $request)
     {
+        $data = $request->only('name', 'description', 'prix', 'categorie_id');
+        $photo = $request->only('image');
+
+        $result = $this->planteRepository->createPlante($data);
+        
+        if ($result) {
+            $photo['plante_id'] = $result->id;
+            $insertImage = $this->photoRepository->insertImage($photo);
+
+            if ($insertImage) {
+                $message = 'La plante et la photo ont été créées avec succès.';
+                $statusCode = 201;
+            } else {
+                $message = 'La plante a été créée, mais la photo n\'a pas pu être téléchargée.';
+                $statusCode = 500;
+            }
+            
+        } else {
+            $message = 'Une erreur est survenue lors de la création de la plante.';
+            $statusCode = 500;
+        }
+
+        return response()->json([
+            'message' => $message,
+            'plante' => $result,
+        ], $statusCode);
         
     }
 
