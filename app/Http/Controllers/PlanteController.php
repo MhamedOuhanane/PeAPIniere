@@ -38,14 +38,14 @@ class PlanteController extends Controller
         }
 
         if ($result) {
-            if (empty($result->items)) {
+            if ($result->count() == 0) {
                 $message = "Il n'existe actuellement aucun plante associé à notre site.";
                 $status = 404;
-                $data = $result;
+                $data = [];
             } else {
                 $message = 'Plantes trouvés avec succès.';
                 $status = 200;
-                $data = [];
+                $data = $result;
             }
         } else {
             $message = 'Certaines erreurs sont survenues lors du returne des Plantes.';
