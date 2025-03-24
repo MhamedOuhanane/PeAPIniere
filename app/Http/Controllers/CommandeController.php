@@ -120,7 +120,26 @@ class CommandeController extends Controller
      */
     public function update(UpdateCommandeRequest $request, Commande $commande)
     {
-        //
+        $status = $request->only('status');
+        if ($commande->status == $status['status']) {
+            $message = 'La commande a déjà ce statut.';
+            $statusCode = 400;
+        } else {
+            $result = $this->commandeRepository->updateCommande($status, $commande);
+
+            if ($result) {
+                $message = 'La commande a été modifiée avec succès. Nouveau statut : ' . $status['status'];
+                $statusCode = 200;
+            } else {
+                $message = 'Erreur lors de la modification de la commande.';
+                $statusCode = 500;
+            }
+        }
+        
+        return response()->json([
+            'message' => $message,
+            'commande' => $commande,
+        ], $statusCode);
     }
 
     /**

@@ -14,6 +14,7 @@ class Commande extends Model
         'quantity',
         'client_id',
         'plante_id',
+        'status',
     ];
 
     public function plante()
