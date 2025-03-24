@@ -39,7 +39,7 @@ class PhotoController extends Controller
         $plante = $this->planteRepository->findPlanteById($data['plante_id']);
         $imageCout = $plante->images->count();
         
-        if ($imageCout <= 4) {
+        if ($imageCout < 4) {
             $data['image'] = $request->file('image')->store('photos', 'public');
             $result = $this->photoRepository->insertImage($data);
             if ($result) {
