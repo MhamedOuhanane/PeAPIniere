@@ -85,11 +85,11 @@ class CategorieController extends Controller
         $data = $request->only('title', 'description');
         $result = $this->categorieRepository->updateCategorie($data, $categorie);
 
-        if ($request) {
-            $message = 'Le categorie a été modifiée avec succès.';
+        if ($result) {
+            $message = 'La plante ' . $data['title'] .' a été modifiée avec succès.';
             $statusCode = 200;
         } else {
-            $message = 'Erreur lors de la modification du categorie.';
+            $message = 'Erreur lors de la modification du plante.';
             $statusCode = 500;
         }
         

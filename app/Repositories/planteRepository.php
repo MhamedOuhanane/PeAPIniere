@@ -28,4 +28,14 @@ class PlanteRepository implements PlanteRepositoryInterface
         return Plante::create($data);
     } 
 
+    public function updatePlante($data, $plante)
+    {
+        return $plante->update($data);
+    } 
+
+    public function deletePlante($plante)
+    {
+        return $plante->delete();
+    } 
+
 }

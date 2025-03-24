@@ -118,7 +118,20 @@ class PlanteController extends Controller
      */
     public function update(UpdatePlanteRequest $request, Plante $plante)
     {
-        //
+        $data = $request->only('name', 'description', 'prix', 'categorie_id');
+        $result = $this->planteRepository->updatePlante($data, $plante);
+
+        if ($request) {
+            $message = 'Le categorie a été modifiée avec succès.';
+            $statusCode = 200;
+        } else {
+            $message = 'Erreur lors de la modification du categorie.';
+            $statusCode = 500;
+        }
+        
+        return response()->json([
+            'message' => $message,
+        ], $statusCode);
     }
 
     /**
