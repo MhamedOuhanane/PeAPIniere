@@ -16,6 +16,11 @@ class UserRepository implements UserRepositoryInterface
         return $user->save();
     }
 
+    public function findUserById($user, $id)
+    {
+        return $user::find($id);
+    }
+
     public function deleteUser($user)
     {
         return $user->delete();
