@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Client>
  */
-class ClientFactory extends Factory
+class ClientFactory extends UserFactory
 {
     /**
      * Define the model's default state.
@@ -16,8 +16,6 @@ class ClientFactory extends Factory
      */
     public function definition(): array
     {
-        return [
-            //
-        ];
+        return parent::definition();
     }
 }

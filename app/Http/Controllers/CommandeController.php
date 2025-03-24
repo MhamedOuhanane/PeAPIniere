@@ -36,7 +36,7 @@ class CommandeController extends Controller
     public function index(Request $request)
     {
         $user = Auth::user();
-        dd($user);
+        
         if ($user->role == 'client') {
             $status = $request->only('status');
             $commandes = [];
