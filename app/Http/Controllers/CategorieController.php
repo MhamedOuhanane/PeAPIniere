@@ -82,7 +82,20 @@ class CategorieController extends Controller
      */
     public function update(UpdateCategorieRequest $request, Categorie $categorie)
     {
-        //
+        $data = $request->only('title', 'description');
+        $result = $this->categorieRepository->updateCategorie($data, $categorie);
+
+        if ($request) {
+            $message = 'Le categorie a été modifiée avec succès.';
+            $statusCode = 200;
+        } else {
+            $message = 'Erreur lors de la modification du categorie.';
+            $statusCode = 500;
+        }
+        
+        return response()->json([
+            'message' => $message,
+        ], $statusCode);
     }
 
     /**
