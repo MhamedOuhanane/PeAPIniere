@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CategorieController;
 use App\Http\Controllers\CommandeController;
+use App\Http\Controllers\PhotoController;
 use App\Http\Controllers\PlanteController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
@@ -17,6 +18,7 @@ Route::middleware('auth:api')->group(function(){
     Route::apiResource('commande', CommandeController::class);
     Route::apiResource('categorie', CategorieController::class);
     Route::put('user/{user}', [UserController::class, 'update']);
+    Route::post('photo', [PhotoController::class, 'store']);
 });
 
 

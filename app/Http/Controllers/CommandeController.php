@@ -85,7 +85,7 @@ class CommandeController extends Controller
     {
         $client = Client::find(Auth::id());
         $data = $request->only('quantity', 'slug');
-        $plante = $this->planteRepository->findPlante($data['slug']);
+        $plante = $this->planteRepository->findPlanteBySlug($data['slug']);
         if (!$plante) {
             $message = 'Plante n\'existe pas.';
             $status = 404;
