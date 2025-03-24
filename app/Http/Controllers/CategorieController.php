@@ -49,7 +49,24 @@ class CategorieController extends Controller
      */
     public function store(StoreCategorieRequest $request)
     {
-        //
+        $data = $request->only('title', 'description');
+
+        $result = $this->categorieRepository->createCategorie($data);
+
+        if ($result) {
+            $message = 'Le catégorie "' . $result->title . '" a été créée avec succès.';
+            $statusCode = 201;
+            $categorie = $result;  
+        } else {
+            $message = 'Erreur lors de la création de catégories.';
+            $statusCode = 500;
+            $categorie = null;
+        }
+
+        return response()->json([
+            'message' => $message,
+            'catégorie' => $categorie,
+        ], $statusCode);
     }
 
     /**
