@@ -7,8 +7,10 @@ use App\Http\Requests\StoreCommandeRequest;
 use App\Http\Requests\UpdateCommandeRequest;
 use App\Models\Client;
 use App\Models\Plante;
+use App\Models\User;
 use App\RepositorieInterface\CommandeRepositoryInterface;
 use App\RepositorieInterface\PlanteRepositoryInterface;
+use App\RepositorieInterface\UserRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -16,13 +18,16 @@ class CommandeController extends Controller
 {
     protected $planteRepository;
     protected $commandeRepository;
+    protected $userRepository;
 
     public function __construct(PlanteRepositoryInterface $planteRepository,
-                                CommandeRepositoryInterface $commandeRepository
+                                CommandeRepositoryInterface $commandeRepository,
+                                UserRepositoryInterface $userRepository
                                 )
     {
         $this->planteRepository = $planteRepository;
         $this->commandeRepository = $commandeRepository;
+        $this->userRepository = $userRepository;
     }
 
     /**
@@ -30,26 +35,41 @@ class CommandeController extends Controller
      */
     public function index(Request $request)
     {
-        $status = $request->only('status');
-        $client = Client::find(Auth::id());
-        $commandes = [];
+        $user = Auth::user();
+        
+        if ($user->role == 'client') {
+            $status = $request->only('status');
+            $commandes = [];
 
-        if (!$status) {
-            $message = 'Mes commandes: ';
-            $commandes = $client->commandes;
-            $statusMessage = 200;
+            if (!$status) {
+                $client = $this->userRepository->findUserById(Client::class, $user->id);
+                $message = 'Mes commandes: ';
+                $commandes = $client->commandes;
+                $statusMessage = 200;
+            } else {
+                $result = $this->commandeRepository->getClientCommandes($user, $status);
+                if ($result) {
+                    $message = 'Les commandes qui '. $status['status'] . 'sont: ';
+                    $commandes = $result;
+                    $statusMessage = 200;
+                } else {
+                    $message = 'Aucun commande trouvé avec le nom ' . $status['status'] . '.';
+                    $statusMessage = 404;
+                }
+                
+            }
         } else {
-            $result = $this->commandeRepository->getClientCommandes($client, $status);
+            $result = $this->commandeRepository->getAllCommndes();
             if ($result) {
-                $message = 'Les commandes qui '. $status['status'] . 'sont: ';
+                $message = 'Les commandes sont: ';
                 $commandes = $result;
                 $statusMessage = 200;
             } else {
-                $message = 'Aucun tag trouvé avec le nom ' . $status['status'] . '.';
+                $message = 'Aucun commande trouvé .';
                 $statusMessage = 404;
             }
-            
         }
+
 
         return response()->json([
             'message' => $message,
@@ -100,7 +120,26 @@ class CommandeController extends Controller
      */
     public function update(UpdateCommandeRequest $request, Commande $commande)
     {
-        //
+        $status = $request->only('status');
+        if ($commande->status == $status['status']) {
+            $message = 'La commande a déjà ce statut.';
+            $statusCode = 400;
+        } else {
+            $result = $this->commandeRepository->updateCommande($status, $commande);
+
+            if ($result) {
+                $message = 'La commande a été modifiée avec succès. Nouveau statut : ' . $status['status'];
+                $statusCode = 200;
+            } else {
+                $message = 'Erreur lors de la modification de la commande.';
+                $statusCode = 500;
+            }
+        }
+        
+        return response()->json([
+            'message' => $message,
+            'commande' => $commande,
+        ], $statusCode);
     }
 
     /**

@@ -39,7 +39,7 @@ class CommandeRepository implements CommandeRepositoryInterface
 
     public function updateCommande($data, $commande)
     {
-        
+        return $commande->update($data);
     }
 
     public function deleteCommande($commande)

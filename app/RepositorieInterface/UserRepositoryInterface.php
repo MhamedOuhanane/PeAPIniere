@@ -8,6 +8,7 @@ interface UserRepositoryInterface
 
     public function UpdateUser($user);
     public function deleteUser($user);
+    public function findUserById($user, $id);
 
 
 }
