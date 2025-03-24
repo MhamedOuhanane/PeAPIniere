@@ -25,27 +25,31 @@ class PlanteController extends Controller
     public function index(Request $request)
     {
         $search = $request->only('search') ?? null;
-        $result = [];
         if (!$search) {
             $result = $this->planteRepository->getAllPlantes();
         } else {
             $result = $this->planteRepository->searchPlantes($search);
         }
 
-        if (empty($result)) {
-            $message = "Il n'existe actuellement aucun plante associé à notre site.";
-            $status = 404;
-        } elseif ($result) {
-            $message = 'Plantes trouvés avec succès.';
-            $status = 200;
+        if ($result) {
+            if (empty($result->items)) {
+                $message = "Il n'existe actuellement aucun plante associé à notre site.";
+                $status = 404;
+                $data = $result;
+            } else {
+                $message = 'Plantes trouvés avec succès.';
+                $status = 200;
+                $data = [];
+            }
         } else {
             $message = 'Certaines erreurs sont survenues lors du returne des Plantes.';
             $status = 500;
+            $data = null;            
         }
         
         return response()->json([
             'message' => $message,
-            'plantes' => $result,
+            'plantes' => $data,
         ], $status);
     }
 

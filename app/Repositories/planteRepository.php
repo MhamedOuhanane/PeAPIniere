@@ -9,7 +9,7 @@ class PlanteRepository implements PlanteRepositoryInterface
 {
     public function getAllPlantes()
     {
-        return Plante::all();
+        return Plante::with('images')->get();
     }
 
     public function searchPlantes($search)

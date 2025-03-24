@@ -23,7 +23,7 @@ class CategorieController extends Controller
         $result = $this->categorieRepository->getAllCategories();
 
         if ($result) {
-            if (empty($result)) {
+            if (!empty($result->items)) {
                 $message = 'Les Catégories sont trouvées avec succès.';
                 $statusCode = 200;
                 $data = $result;
