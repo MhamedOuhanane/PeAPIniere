@@ -11,16 +11,14 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:api')->group(function(){
     Route::apiResource('plante', PlanteController::class);
-    // Route::get('plante/{slug}', [PlanteController::class, 'show'])->name('plante.show');
-    // Route::post('plante', [PlanteController::class, 'store'])->name('plante.store');
-    // Route::put('plante/{slug}', [PlanteController::class, 'update'])->name('plante.update');
-    // Route::delete('plante/{slug}', [PlanteController::class, 'destroy'])->name('plante.destroy');
-
     Route::apiResource('commande', CommandeController::class);
     Route::apiResource('categorie', CategorieController::class);
     Route::put('user/{user}', [UserController::class, 'update']);
     Route::post('photo', [PhotoController::class, 'store']);
-    Route::get('statistique', [DashboardAdminController::class, 'index']);
+
+    Route::middleware('role:admine')->group(function() {
+        Route::get('statistique', [DashboardAdminController::class, 'index']);
+    });
 });
 
 

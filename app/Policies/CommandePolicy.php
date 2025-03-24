@@ -13,7 +13,7 @@ class CommandePolicy
      */
     public function viewAny(User $user): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -21,7 +21,7 @@ class CommandePolicy
      */
     public function view(User $user, Commande $commande): bool
     {
-        return false;
+        return $user->id === $commande->client_id || $user->role->name != 'client';
     }
 
     /**
@@ -29,15 +29,15 @@ class CommandePolicy
      */
     public function create(User $user): bool
     {
-        return false;
+        return $user->role->name === 'client';
     }
 
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Commande $commande): bool
+    public function update(User $user, Commande $commande, String $status): bool
     {
-        return false;
+        return ($user->role->name === 'employe' && !empty($status)) || ($user->id === $commande->client_id && empty($status));
     }
 
     /**
@@ -45,7 +45,7 @@ class CommandePolicy
      */
     public function delete(User $user, Commande $commande): bool
     {
-        return false;
+        return $user->role->name === $commande->client_id;
     }
 
     /**

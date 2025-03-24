@@ -9,6 +9,7 @@ use App\Http\Requests\UpdatePlanteRequest;
 use App\RepositorieInterface\PhotoRepositoryInterface;
 use App\RepositorieInterface\PlanteRepositoryInterface;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 use function Laravel\Prompts\error;
 
@@ -30,6 +31,8 @@ class PlanteController extends Controller
      */
     public function index(Request $request)
     {
+        Gate::authorize('viewAny');
+
         $search = $request->only('search') ?? null;
         if (!$search) {
             $result = $this->planteRepository->getAllPlantes();
@@ -64,6 +67,8 @@ class PlanteController extends Controller
      */
     public function store(StorePlanteRequest $request)
     {
+        Gate::authorize('create');
+
         $data = $request->only('name', 'description', 'prix', 'categorie_id');
         $photo['image'] = $request->file('image')->store('photos', 'public');
 
@@ -100,6 +105,9 @@ class PlanteController extends Controller
      */
     public function show(Plante $plante)
     {
+        Gate::authorize('view');
+
+        Gate::authorize('view', $plante);
 
         if (!$plante) {
             $message = 'Plante non trouvée.';
@@ -119,9 +127,11 @@ class PlanteController extends Controller
      */
     public function update(UpdatePlanteRequest $request, Plante $plante)
     {
+        Gate::authorize('update');
+
         $data = $request->only('name', 'description', 'prix', 'categorie_id');
         $result = $this->planteRepository->updatePlante($data, $plante);
-        
+
         if ($result) {
             $message = 'La plante a été modifiée avec succès.';
             $statusCode = 200;
@@ -140,6 +150,8 @@ class PlanteController extends Controller
      */
     public function destroy(Plante $plante)
     {
+        Gate::authorize('delete');
+
         $result = $this->planteRepository->deletePlante($plante);
 
         if ($result) {

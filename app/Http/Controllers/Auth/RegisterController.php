@@ -7,6 +7,7 @@ use App\Http\Requests\Auth\RegisterUserRequest;
 use App\Models\Client;
 use App\RepositorieInterface\UserRepositoryInterface;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class RegisterController extends Controller
 {
@@ -22,6 +23,7 @@ class RegisterController extends Controller
      */
     public function register(RegisterUserRequest $request)
     {
+
         $data = $request->only('first_name', 'last_name', 'email', 'password', 'role_id');
         $result = $this->userRepository->register($data, Client::class);
 

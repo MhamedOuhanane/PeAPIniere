@@ -7,6 +7,7 @@ use App\Http\Requests\StorePhotoRequest;
 use App\Http\Requests\UpdatePhotoRequest;
 use App\RepositorieInterface\PhotoRepositoryInterface;
 use App\RepositorieInterface\PlanteRepositoryInterface;
+use Illuminate\Support\Facades\Gate;
 use PhpParser\Node\Stmt\If_;
 
 class PhotoController extends Controller
@@ -35,6 +36,8 @@ class PhotoController extends Controller
      */
     public function store(StorePhotoRequest $request)
     {
+        Gate::authorize('create');
+
         $data = $request->only('image', 'plante_id');
         $plante = $this->planteRepository->findPlanteById($data['plante_id']);
         $imageCout = $plante->images->count();

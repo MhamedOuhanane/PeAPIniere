@@ -2,6 +2,12 @@
 
 namespace App\Providers;
 
+use App\Models\Categorie;
+use App\Models\Plante;
+use App\Models\User;
+use App\Policies\CategoriePolicy;
+use App\Policies\PlantePolicy;
+use App\Policies\UserPolicy;
 use App\RepositorieInterface\CategorieRepositoryInterface;
 use App\RepositorieInterface\CommandeRepositoryInterface;
 use App\RepositorieInterface\PhotoRepositoryInterface;

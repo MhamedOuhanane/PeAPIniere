@@ -8,6 +8,7 @@ use App\Models\User;
 use App\RepositorieInterface\RoleRepositoryInterface;
 use App\RepositorieInterface\UserRepositoryInterface;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class UserController extends Controller
 {
@@ -51,6 +52,8 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
+        Gate::authorize('update', $user);
+
         $status = $request->only('status');
         $data = [
             'id' => 3,

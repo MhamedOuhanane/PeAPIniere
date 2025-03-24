@@ -13,7 +13,7 @@ class PlantePolicy
      */
     public function viewAny(User $user): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -21,7 +21,7 @@ class PlantePolicy
      */
     public function view(User $user, Plante $plante): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -29,7 +29,7 @@ class PlantePolicy
      */
     public function create(User $user): bool
     {
-        return false;
+        return $user->role->name === 'admine';
     }
 
     /**
@@ -37,7 +37,7 @@ class PlantePolicy
      */
     public function update(User $user, Plante $plante): bool
     {
-        return false;
+        return $user->role->name === 'admine';
     }
 
     /**
@@ -45,7 +45,7 @@ class PlantePolicy
      */
     public function delete(User $user, Plante $plante): bool
     {
-        return false;
+        return $user->role->name === 'admine';
     }
 
     /**

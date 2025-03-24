@@ -6,6 +6,7 @@ use App\Models\Categorie;
 use App\Http\Requests\StoreCategorieRequest;
 use App\Http\Requests\UpdateCategorieRequest;
 use App\RepositorieInterface\CategorieRepositoryInterface;
+use Illuminate\Support\Facades\Gate;
 
 class CategorieController extends Controller
 {
@@ -20,6 +21,8 @@ class CategorieController extends Controller
      */
     public function index()
     {
+        Gate::authorize('viewAny');
+
         $result = $this->categorieRepository->getAllCategories();
 
         if ($result) {
@@ -49,6 +52,8 @@ class CategorieController extends Controller
      */
     public function store(StoreCategorieRequest $request)
     {
+        Gate::authorize('cerate');
+
         $data = $request->only('title', 'description');
 
         $result = $this->categorieRepository->createCategorie($data);
@@ -74,7 +79,13 @@ class CategorieController extends Controller
      */
     public function show(Categorie $categorie)
     {
-        //
+        Gate::authorize('view', $categorie);
+
+        return response()->json([
+            'message' => 'Le catégorie : ',
+            'categorie' => $categorie,
+        ], 200);
+        
     }
 
     /**
@@ -82,6 +93,8 @@ class CategorieController extends Controller
      */
     public function update(UpdateCategorieRequest $request, Categorie $categorie)
     {
+        Gate::authorize('update');
+
         $data = $request->only('title', 'description');
         $result = $this->categorieRepository->updateCategorie($data, $categorie);
 
@@ -103,6 +116,8 @@ class CategorieController extends Controller
      */
     public function destroy(Categorie $categorie)
     {
+        Gate::authorize('delete');
+
         $result = $this->categorieRepository->deleteCategorie($categorie);
 
         if ($result) {
