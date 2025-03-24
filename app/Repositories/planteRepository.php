@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Models\Categorie;
 use App\Models\Plante;
 use App\RepositorieInterface\PlanteRepositoryInterface;
 
@@ -9,7 +10,7 @@ class PlanteRepository implements PlanteRepositoryInterface
 {
     public function getAllPlantes()
     {
-        return Plante::all();
+        return Plante::with('images')->get();
     }
 
     public function searchPlantes($search)
@@ -21,5 +22,20 @@ class PlanteRepository implements PlanteRepositoryInterface
     {
         return Plante::where('slug', $slug)->first();
     }
+
+    public function createPlante($data)
+    {
+        return Plante::create($data);
+    } 
+
+    public function updatePlante($data, $plante)
+    {
+        return $plante->update($data);
+    } 
+
+    public function deletePlante($plante)
+    {
+        return $plante->delete();
+    } 
 
 }

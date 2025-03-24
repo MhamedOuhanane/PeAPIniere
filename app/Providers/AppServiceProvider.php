@@ -2,11 +2,15 @@
 
 namespace App\Providers;
 
+use App\RepositorieInterface\CategorieRepositoryInterface;
 use App\RepositorieInterface\CommandeRepositoryInterface;
+use App\RepositorieInterface\PhotoRepositoryInterface;
 use App\RepositorieInterface\PlanteRepositoryInterface;
 use App\RepositorieInterface\RoleRepositoryInterface;
 use App\RepositorieInterface\UserRepositoryInterface;
+use App\Repositories\CategorieRepository;
 use App\Repositories\CommandeRepository;
+use App\Repositories\PhotoRepository;
 use App\Repositories\PlanteRepository;
 use App\Repositories\RoleRepository;
 use App\Repositories\UserRepository;
@@ -23,6 +27,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(PlanteRepositoryInterface::class, PlanteRepository::class);
         $this->app->bind(CommandeRepositoryInterface::class, CommandeRepository::class);
         $this->app->bind(RoleRepositoryInterface::class, RoleRepository::class);
+        $this->app->bind(CategorieRepositoryInterface::class, CategorieRepository::class);
+        $this->app->bind(PhotoRepositoryInterface::class, PhotoRepository::class);
     }
 
     /**

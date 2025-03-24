@@ -19,7 +19,7 @@ class CommandeFactory extends Factory
     public function definition(): array
     {
         return [
-            'quantity' => $this->faker->numberBetween(1, 100), 
+            'quantity' => $this->faker->numberBetween(1, 20), 
             'status' => $this->faker->randomElement(['En Attente', 'En Préparation', 'Livrée']),
             'client_id' => $this->faker->randomElement(Client::pluck('id')->toArray()), 
             'plante_id' => Plante::inRandomOrder()->first()->id,
