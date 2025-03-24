@@ -12,6 +12,7 @@ class Photo extends Model
 
     protected $fillable = [
         'image',
+        'plante_id',
     ];
 
     public function plante()

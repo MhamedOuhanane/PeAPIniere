@@ -18,7 +18,7 @@ class PlanteController extends Controller
     protected $photoRepository;
 
     public function __construct(PlanteRepositoryInterface $planteRepository,
-                                PhotoRepositoryInterface $photoRepository,
+                                PhotoRepositoryInterface $photoRepository
                                 )
     {
         $this->planteRepository = $planteRepository;
@@ -71,6 +71,7 @@ class PlanteController extends Controller
         
         if ($result) {
             $photo['plante_id'] = $result->id;
+            
             $insertImage = $this->photoRepository->insertImage($photo);
 
             if ($insertImage) {
