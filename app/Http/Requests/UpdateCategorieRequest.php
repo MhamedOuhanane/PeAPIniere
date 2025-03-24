@@ -11,7 +11,7 @@ class UpdateCategorieRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -21,8 +21,11 @@ class UpdateCategorieRequest extends FormRequest
      */
     public function rules(): array
     {
+        $categorie = $this->route('categorie');
+        
         return [
-            //
+            'title' => ['required', 'string', 'unique:categories,title,' . $categorie->id],
+            'description' => ['required', 'string', 'min:40'],
         ];
     }
 }
