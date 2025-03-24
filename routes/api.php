@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CategorieController;
 use App\Http\Controllers\CommandeController;
 use App\Http\Controllers\PlanteController;
 use App\Http\Controllers\UserController;
@@ -14,6 +15,8 @@ Route::middleware('auth:api')->group(function(){
     // Route::delete('plante/{slug}', [PlanteController::class, 'destroy'])->name('plante.destroy');
 
     Route::apiResource('commande', CommandeController::class);
+    Route::apiResource('plante', PlanteController::class);
+    Route::apiResource('categorie', CategorieController::class);
     Route::put('user/{user}', [UserController::class, 'update']);
 });
 
