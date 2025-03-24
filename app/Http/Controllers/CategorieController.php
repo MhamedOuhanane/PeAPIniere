@@ -86,10 +86,10 @@ class CategorieController extends Controller
         $result = $this->categorieRepository->updateCategorie($data, $categorie);
 
         if ($result) {
-            $message = 'La plante ' . $data['title'] .' a été modifiée avec succès.';
+            $message = 'Le categorie ' . $data['title'] .' a été modifiée avec succès.';
             $statusCode = 200;
         } else {
-            $message = 'Erreur lors de la modification du plante.';
+            $message = 'Erreur lors de la modification du categorie.';
             $statusCode = 500;
         }
         
@@ -103,6 +103,18 @@ class CategorieController extends Controller
      */
     public function destroy(Categorie $categorie)
     {
-        //
+        $result = $this->categorieRepository->deleteCategorie($categorie);
+
+        if ($result) {
+            $message = 'Le categorie "' . $categorie->title .'" a été supprimée avec succès.';
+            $statusCode = 200;
+        } else {
+            $message = 'Erreur lors de la supprission du categorie.';
+            $statusCode = 500;
+        }
+        
+        return response()->json([
+            'message' => $message,
+        ], $statusCode);
     }
 }

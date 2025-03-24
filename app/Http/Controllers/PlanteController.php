@@ -139,6 +139,18 @@ class PlanteController extends Controller
      */
     public function destroy(Plante $plante)
     {
-        //
+        $result = $this->planteRepository->deletePlante($plante);
+
+        if ($result) {
+            $message = 'La plante ' . $plante->name .' a été supprimée avec succès.';
+            $statusCode = 200;
+        } else {
+            $message = 'Erreur lors de la suppression du plante.';
+            $statusCode = 500;
+        }
+        
+        return response()->json([
+            'message' => $message,
+        ], $statusCode);
     }
 }
