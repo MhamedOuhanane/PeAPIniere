@@ -105,8 +105,6 @@ class PlanteController extends Controller
      */
     public function show(Plante $plante)
     {
-        Gate::authorize('view');
-
         Gate::authorize('view', $plante);
 
         if (!$plante) {
