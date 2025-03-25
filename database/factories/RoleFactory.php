@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Role;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -16,8 +17,13 @@ class RoleFactory extends Factory
      */
     public function definition(): array
     {
+        // $Admine = Role::firstOrCreate(['name' => 'admine', 'guard_name' => 'admin']);
+        // $Employe = Role::firstOrCreate(['name' => 'employe', 'guard_name' => 'employe']);
+        // $Client = Role::firstOrCreate(['name' => 'client', 'guard_name' => 'client']);
         return [
-            //
+            'id' => 3,
+            'name' => 'client',
+            'guard_name' => 'client'
         ];
     }
 }
