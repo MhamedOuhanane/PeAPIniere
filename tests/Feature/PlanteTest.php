@@ -30,9 +30,9 @@ class PlanteTest extends TestCase
         Role::factory()->create();
         $user = Client::factory()->create();
         $token = JWTAuth::fromUser($user);
-
+        
         $response = $this->withHeaders([
-            'Authorization' => 'Bearer ' . $token,
+            'Authorization' => "Bearer  $token",
             'Accept' => 'application/json',
         ])->get('/api/plante/rose-flours');
         

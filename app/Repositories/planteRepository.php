@@ -16,7 +16,37 @@ class PlanteRepository implements PlanteRepositoryInterface
                     ->leftJoin('commandes as cd', 'pl.id', '=', 'cd.plante_id')
                     ->select('pl.*', 'ph.*', DB::raw('COUNT(cd.*) AS commandeCount'))
                     ->groupBy('pl.id', 'ph.id')
+                    ->orderBy('commandeCount', 'DESC')
+                    ->limit('5')
                     ->get();
+
+                    // // DB::table('plantes as pl')
+
+                    // Sélectionne la table plantes avec l'alias pl pour travailler avec les plantes.
+                    
+                    // // ->leftJoin('photos as ph', 'pl.id', '=', 'ph.plante_id')
+                    
+                    // Fait une jointure avec la table photos, en associant chaque plante à ses photos, même si certaines plantes n'ont pas de photos.
+                    
+                    // // ->leftJoin('commandes as cd', 'pl.id', '=', 'cd.plante_id')
+                    
+                    // Fait une jointure avec la table commandes, associant chaque plante à ses commandes, même si certaines plantes n'ont pas de commandes.
+                    
+                    // // ->select('pl.*', 'ph.*', DB::raw('COUNT(cd.*) AS commandeCount'))
+                    
+                    // Sélectionne toutes les colonnes de plantes et photos, et calcule le nombre de commandes pour chaque plante.
+                    
+                    // // ->groupBy('pl.id', 'ph.id')
+                    
+                    // Regroupe les résultats par l'identifiant de la plante et de la photo, ce qui est nécessaire pour le calcul du nombre de commandes.
+                    
+                    // // ->orderBy('commandeCount', 'DESC')
+                    
+                    // Trie les résultats en fonction du nombre de commandes, de la plus élevée à la plus basse.
+                    
+                    // // ->limit('5')
+                    
+                    // Limite le nombre de résultats à 5, affichant ainsi seulement les 5 plantes les plus commandées.
     }
 
     public function searchPlantes($search)
